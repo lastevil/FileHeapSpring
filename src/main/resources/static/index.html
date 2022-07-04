@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html ng-app="fileApp">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+    <script src="scrypt/index.js"></script>
+
+    <title>Мои файлы</title>
+</head>
+<body>
+<div class="container" ng-controller="indexController">
+    <li style="list-style-type: none" ng-show="!isUserLoggedIn()">
+        <h3 class="text-center text-white pt-5">Login form</h3>
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <form id="form" class="align-middle" ng-submit="tryToAuth()">
+                        <h3 class="text-center text-info">Login</h3>
+                        <div class="form-group">
+                            <label for="username" class="text-info">Username:</label><br>
+                            <input type="text" name="username" id="username" class="form-control"
+                                   aria-describedby="inputGroup-sizing-sm"
+                                   ng-model="user.username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-info">Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control"
+                                   aria-describedby="inputGroup-sizing-sm"
+                                   ng-model="user.password">
+                        </div>
+                        <div class="form-group">
+                            <button id="navLoginSubmit" class="btn btn-info btn-md" type="submit">Войти
+                            </button>
+                        </div>
+                    </form>
+                    <div id="register-link" class="text-right">
+                        <a href="#" class="text-info">Register here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li  class="nav-item" ng-show="isUserLoggedIn()"  style="padding: 4px; list-style-type: none;" >
+        <button class="btn btn-outline-secondary btn-sm" ng-click="tryToLogout()">Выйти</button>
+    </li>
+
+    <div ng-show="isUserLoggedIn()">
+        <h3>Спсиок файлов:</h3>
+
+        <br>
+        <table class="table table-hover" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>имя файла</td>
+                <td>тип файла</td>
+                <td>размер</td>
+                <td></td>
+            </tr>
+            <tbody>
+            <tr ng-repeat="file in filesList.content">
+                <td>{{file.fileName}}</td>
+                <td>{{file.fileType}}</td>
+                <td>{{file.fileSize}}</td>
+                <td>
+                    <button class="btn btn-primary" ng-click="downloadFile(file.id)">Скачать</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" ng-click="deleteFile(file.id)">Удалить</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" ng-repeat="i in countPage">
+                <button style="margin-left: 2px" type="button" class="btn btn-outline-primary"
+                        ng-click="setCurrentPage(i)">
+                    {{i}}
+                </button>
+            </div>
+        </div>
+
+        <label>Загрузить файл:</label>
+        <input id="fileupload" type="file" name="fileupload">
+        <button class="btn btn-primary" id="upload-button" ng-click="uploadFile()"> Upload</button>
+    </div>
+</div>
+</body>
+</html>
