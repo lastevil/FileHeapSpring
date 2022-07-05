@@ -25,18 +25,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-
         String username = null;
         String jwt = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwt);
+                logger.info("jwt user - > "+username);
             } catch (ExpiredJwtException e) {
                 logger.debug("Token is expired");
             }
         }
-
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken details = new UsernamePasswordAuthenticationToken(
                     username
@@ -48,6 +47,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     .collect(Collectors.toList())
             );
             SecurityContextHolder.getContext().setAuthentication(details);
+        }
+        if (authHeader == null){
+            SecurityContextHolder.getContext().setAuthentication(null);
         }
         filterChain.doFilter(request, response);
     }

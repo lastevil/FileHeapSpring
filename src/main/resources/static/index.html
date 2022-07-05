@@ -67,7 +67,7 @@
                 <td>{{file.fileType}}</td>
                 <td>{{file.fileSize.toFixed(1)}}</td>
                 <td>
-                    <a href="http://localhost:8189/fileApp/api/v1/files/download/{{file.id}}" download="{{file.fileName}}"><button class="btn btn-primary">Скачать</button></a>
+                    <a href="/fileApp/api/v1/files/download/{{file.id}}" download="{{file.fileName}}"><button class="btn btn-primary">Скачать</button></a>
                 </td>
                 <td>
                     <button class="btn btn-danger" ng-click="deleteFile(file.id)">Удалить</button>

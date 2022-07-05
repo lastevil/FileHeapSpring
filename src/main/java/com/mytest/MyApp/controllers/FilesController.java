@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.web.servlet.headers.HeadersSecurityMarker;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 
 @RestController
@@ -22,9 +25,9 @@ public class FilesController {
     private final FilesService filesService;
 
     @GetMapping()
-    Page<FilesDTO> getFilePage(@RequestParam(name = "page", defaultValue = "1") Integer page) {
-        log.info("USER: "+getUser());
-        return filesService.getFiles(page, getUser());
+    Page<FilesDTO> getFilePage(@RequestParam(name = "page", defaultValue = "1") Integer page, @HeadersSecurityMarker UsernamePasswordAuthenticationToken token) {
+        log.info("USER : " + token.toString());
+        return filesService.getFiles(page, token.getPrincipal().toString());
     }
 
     @GetMapping("/download/{id}")
@@ -52,13 +55,8 @@ public class FilesController {
     }
 
     @PostMapping()
-    FilesDTO addFile(@RequestPart("data") MultipartFile file) throws IOException {
-        return filesService.save(file.getOriginalFilename(), file.getContentType(), file.getBytes(), getUser());
+    FilesDTO addFile(@RequestPart("data") MultipartFile file, @HeadersSecurityMarker UsernamePasswordAuthenticationToken token) throws IOException {
+        return filesService.save(file.getOriginalFilename(), file.getContentType(), file.getBytes(), token.getPrincipal().toString());
     }
-
-    private String getUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getName();
-    }
-
 }
+
