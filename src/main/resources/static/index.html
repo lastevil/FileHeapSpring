@@ -58,16 +58,16 @@
             <tr>
                 <td>имя файла</td>
                 <td>тип файла</td>
-                <td>размер</td>
+                <td>размер кБ</td>
                 <td></td>
             </tr>
             <tbody>
             <tr ng-repeat="file in filesList.content">
                 <td>{{file.fileName}}</td>
                 <td>{{file.fileType}}</td>
-                <td>{{file.fileSize}}</td>
+                <td>{{file.fileSize.toFixed(1)}}</td>
                 <td>
-                    <button class="btn btn-primary" ng-click="downloadFile(file.id)">Скачать</button>
+                    <a href="http://localhost:8189/fileApp/api/v1/files/download/{{file.id}}" download="{{file.fileName}}"><button class="btn btn-primary">Скачать</button></a>
                 </td>
                 <td>
                     <button class="btn btn-danger" ng-click="deleteFile(file.id)">Удалить</button>

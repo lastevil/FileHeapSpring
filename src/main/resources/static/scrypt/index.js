@@ -22,15 +22,8 @@ angular.module('fileApp', []).controller('indexController', function ($scope, $h
         });
     };
 
-    $scope.deleteFile = function (productId) {
-        $http.delete(contextPath + '/' + productId)
-            .then(function (response) {
-                $scope.loadFilesList(currentPage);
-            });
-    };
-
-    $scope.downloadFile = function (productId) {
-        $http.delete(contextPath + '/download/' + productId)
+    $scope.deleteFile = function (fileId) {
+        $http.delete(contextPath + '/' + fileId)
             .then(function (response) {
                 $scope.loadFilesList(currentPage);
             });

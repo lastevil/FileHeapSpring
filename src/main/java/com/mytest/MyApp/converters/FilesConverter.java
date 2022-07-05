@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface FilesConverter{
     FilesConverter INSTANCE = Mappers.getMapper( FilesConverter.class );
-   @Mapping(target = "fileSize", expression = "java(myFile.getData().length)")
+   @Mapping(target = "fileSize", expression = "java(myFile.getData().length/1024)")
     public FilesDTO EntityToFileDTO(MyFile myFile);
 }
